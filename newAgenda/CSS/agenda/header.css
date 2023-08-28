@@ -1,0 +1,131 @@
+.header{
+    height: 10vh;
+    width: 96vw;
+
+    margin: 1% 1% 0 1%;
+    padding: 0 1%;
+
+    background: var(--black-transparent);
+    border-radius: 16px;
+
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+
+    font-size: 1em;
+
+    overflow: hidden;
+
+    display: flex;
+    justify-content: space-around;
+}
+
+.control-date{
+    height: 100%;
+    width: 15vw;
+
+    display: flex;
+    flex-direction: column;
+}
+.control-date > *{
+    height: 50%;
+
+    margin: 0 0 0 16px;
+}
+
+.week-button-wrapper{
+    width: 10%;
+
+    display: flex;
+    justify-content: space-between;
+}
+
+.this-week{
+    height: 80%;
+    border-radius: 16px;
+
+    background: var(--black-transparent);
+    border-radius: 16px;
+    border: 1px solid rgba(0, 0, 0, 1); 
+
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+    padding: 0 50%;
+}
+
+.this-week:hover{
+    background: var(--white);
+    color: var(--black);
+    margin-top: -5px;
+    box-shadow: 12px 12px 23px 0 rgba(0,0,0,1);
+    border-radius: 5px;
+}
+
+.change-week-wrapper{
+    display: flex;
+}
+.change-week-button{
+    height: 4vh;
+    width: 4vh;
+
+    color: var(--white);
+    font-size: 25px;
+    font-weight: bold;
+    cursor: pointer;
+
+    transition: all 0.3s ease-in-out;
+    background-color: rgba(0, 0, 0, 0);
+    
+    border: 0;
+}
+.change-week-button:hover{
+    background: var(--white);
+    color: var(--black);
+    border-radius: 5px;
+    box-shadow: 12px 12px 23px 0 rgba(0,0,0,1);
+    margin-top: -5px;
+}
+
+
+.agenda-header {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    grid-gap: 10px;
+    
+    height: 100%;
+    width: calc(70vw + 15px);
+    
+    font-weight: bold;
+    text-align: center;
+    position: relative;
+    top: 0vh;
+    right: 0;
+
+    padding: 1% 0;
+    padding-left: 6.5em;
+}
+
+.agenda-day {
+    height: 50%;
+    font-size: 1rem;
+    border: 1px solid var(--black);
+
+    margin-left: 10px;
+    margin-right: 10px;
+
+    background-color: var(--black-transparent);
+    border-radius: 16px;
+    border: 1px solid var(--black);
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.current-day{
+    background: var(--white);
+}
+
+.current-day label{
+    color: var(--black);
+}
