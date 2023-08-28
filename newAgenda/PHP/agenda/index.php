@@ -25,6 +25,7 @@
     <script src="../../JS/agenda/coloris.min.js"></script>
 
     <script src="../../JS/agenda/agenda.js" defer></script>
+    <script src="../../JS/agenda/accordion.js" defer></script>
 </head>
 
 <body>
@@ -68,128 +69,131 @@
         </div>
     </header>
 
-    <?php
-        if(isset($_POST['shareInputValue'])){
-            $shareInputValue = $_POST['shareInputValue'];
-            echo "<div class='reponesForHTML'>";
-                if($shareInputValue !== "") {
-                    $SQL =  "SELECT * FROM login WHERE username LIKE '%$shareInputValue%'";
-                    $resultShare = mysqli_query($connection, $SQL);
-                    $resultCheck = mysqli_num_rows($resultShare);
+   <main>
 
-                    if ($resultCheck > 0) {
-                        while ($row = mysqli_fetch_assoc($resultShare)) {
-                            $shareUserID = $row['username'];
-                            echo "<div class='share-user-wrapper' onclick='updateShare(`$shareUserID`)'><p class='share-user'>$shareUserID</p></div>";
-                        }
-                    }
+   <section class="filter-wrapper">
+            <div class="accordion-item">
+                <div class="accordion-item-header">
+                    <h4>Functie Toevoegen</h4> 
+                </div>
+                <div class="accordion-content">
+                    <form method="POST" action="index.php">
+                        <label for="new-functie">Nieuwe functie:</label>
+                        <input type="text" id="new-functie" name="new-functie" placeholder="Naam functie"><br>
+
+                        <label for="new-color">Nieuwe kleur:</label>
+                        <input type="text" data-coloris class="coloris instance1" id="new-color" name="new-color" value="#77077d"><br>
+
+                        <input type="hidden" name="userID" value="<?=  $userID ?>">
+
+                        <input type="submit" name="new-color-submit" value="Toevoegen" class="new-color-submit"><br><br>
+                    </form>                
+                </div>
+            </div>
+
+            <div class="accordion-item">
+                <div class="accordion-item-header">
+                    <h4>Functie Verwijderen</h4> 
+                </div>
+                <div class="accordion-content">
+                    <form method="POST" action="">
+                        <input type="hidden" name="userID" value="<?=  $userID ?>">
+
+                        <label for="remove-functie">Verwijder functie:</label><br>
+                        <select name="remove-color-select" id="remove-color-select">
+                            <?php getColors($userID, $connection); ?>
+                        </select><br>
+                        <input type="submit" name="remove-color-submit" value="Verwijderen" class="remove-color-submit">
+                    </form>
+                </div>
+            </div>
+
+            <div class="accordion-item">
+                <div class="accordion-item-header">
+                    <h4>Filter</h4>
+                </div>
+                <div class="accordion-content">
+                    <form method="POST" action="">
+                        <select name="filter-functie" id="filter-functie">
+                            <option value="0">Geen filter</option>
+                            <?php getColors($userID, $connection) ?>
+                        </select><br>
+                    </form>
+                </div>
+            </div>
+
+            <div class="accordion-item">
+                <div class="accordion-item-header">
+                    <h4>Deel</h4>
+                </div>
+                <div class="accordion-content">
+                    <form method="POST" action="">
+                        <input type="text" name="share-input" placeholder="Gebruikersnaam" class="share-input">
+                        <input type="submit" name="share-submit" value="Deel" class="share-submit">
+                    </form>
+                </div>
+            </div>
+
+            <div class="agenda-hide-wrapper">
+            </div>
+        </section>
+
+        <?php 
+            //if color is deleted
+            if(isset($_POST['remove-color-select'])){
+                $id = $_POST['remove-color-select'];
+
+                //get the data from the database
+                $sql = "SELECT * FROM kleuren WHERE userID = '{$userID}' AND kleur = '{$id}'";
+                $result = mysqli_query($connection, $sql);
+
+                while ($row = mysqli_fetch_assoc($result)) {
+                    $colorID = $row['id'];
+                    $colorUserID = $row['userID'];
+                    $colorName = $row['kleur'];
+                    $colorFunction = $row['functie'];
+
                 }
-            echo "</div>";
-        }
-    ?>
 
-    <section class="view-wrapper">
-        <div class="functie-wrapper">
-            <div class="new-color-wrapper">
-                <h4>Nieuwe functie toevoegen:</h4>
-                <form method="POST" action="index.php">
-                    <label for="new-functie">Nieuwe functie:</label>
-                    <input type="text" id="new-functie" name="new-functie" placeholder="Nieuwe functie"><br>
+                $SQL = "DELETE FROM kleuren WHERE userID = '{$userID}' AND kleur = '{$id}'";
 
-                    <label for="new-color">Nieuwe kleur:</label>
-                    <input type="text" data-coloris class="coloris instance1" id="new-color" name="new-color" value="#77077d"><br>
+                $result = mysqli_query($connection, $SQL);
 
-                    <input type="hidden" name="userID" value="<?=  $userID ?>">
+                echo "<script>window.location.href</script>";
+                echo "<script>window.location.reload()</script>";
+            } 
+        ?>
 
-                    <input type="submit" name="new-color-submit" value="Toevoegen" class="new-color-submit"><br><br>
-                </form>
-            </div>
+        
 
-            <div class="functie-line"></div>
-            
-            <div class="remove-color-wrapper">
-                <h4>Functie verwijderen:</h4>
-                <form method="POST" action="">
-                    <input type="hidden" name="userID" value="<?=  $userID ?>">
+        
+        <div class="main-main-agenda-wrapper">
 
-                    <label for="remove-functie">Verwijder functie:</label><br>
-                    <select name="remove-color-select" id="remove-color-select">
-                        <?php getColors($userID, $connection); ?>
-                    </select><br>
-                    <input type="submit" name="remove-color-submit" value="Verwijderen" class="remove-color-submit">
-                </form>
-            </div>
-            <?php 
-                //if color is deleted
-                if(isset($_POST['remove-color-select'])){
-                    $id = $_POST['remove-color-select'];
-
-                    //get the data from the database
-                    $sql = "SELECT * FROM kleuren WHERE userID = '{$userID}' AND kleur = '{$id}'";
-                    $result = mysqli_query($connection, $sql);
-
-                    while ($row = mysqli_fetch_assoc($result)) {
-                        $colorID = $row['id'];
-                        $colorUserID = $row['userID'];
-                        $colorName = $row['kleur'];
-                        $colorFunction = $row['functie'];
-
-                    }
-
-                    $SQL = "DELETE FROM kleuren WHERE userID = '{$userID}' AND kleur = '{$id}'";
-
-                    $result = mysqli_query($connection, $SQL);
-
-                    echo "<script>window.location.href</script>";
-                    echo "<script>window.location.reload()</script>";
-                } 
-            ?>
-        </div>
-
-        <div class="agenda-filter-wrapper">
-            <div class="filter-wrapper">
-                <h4>Filter:</h4>
-                <form method="POST" action="">
-                    <select name="filter-functie" id="filter-functie">
-                        <option value="0">Geen filter</option>
-                        <?php getColors($userID, $connection) ?>
-                    </select><br>
-                </form>
-            </div>
-        </div>
-
-        <div class="agenda-hide-wrapper"></div>
-    </section>
-
-    
-
-    
-    <div class="main-main-agenda-wrapper">
-
-        <div class='agenda-line-wrapper'>
-            <?php
-                for($i = 1; $i <= 7; $i++){
-                    echo "<div class='agenda-day-line'></div>";
-                }
-            ?>
-        </div>
-      
-        <div class='agenda-grid-wrapper'>
-             
-            <div class="agenda-times">
-                <?php 
-                    for($i = 0; $i <= 23; $i++){ 
-                    echo '<div class="time-wrapper">
-                            <!-- <div class="time-header"><label>'.$i.' uur</label></div> -->
-                            <div class="time-line"></div>
-                        </div> ';
+            <div class='agenda-line-wrapper'>
+                <?php
+                    for($i = 1; $i <= 7; $i++){
+                        echo "<div class='agenda-day-line'></div>";
                     }
                 ?>
             </div>
-                    
-            <?php require_once 'displayAgendaItems.php'; ?>
+        
+            <div class='agenda-grid-wrapper'>
+                
+                <div class="agenda-times">
+                    <?php 
+                        for($i = 0; $i <= 23; $i++){ 
+                        echo '<div class="time-wrapper">
+                                <!-- <div class="time-header"><label>'.$i.' uur</label></div> -->
+                                <div class="time-line"></div>
+                            </div> ';
+                        }
+                    ?>
+                </div>
+                        
+                <?php require_once 'displayAgendaItems.php'; ?>
+            </div>
         </div>
-    </div>
+   </main>
 </body>
 </html>
 
