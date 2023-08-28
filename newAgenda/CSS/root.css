@@ -30,7 +30,9 @@ h1, h2, h3, h4, h5, h6, p, li, a, button, input, textarea, select, option, label
 
 body{
     min-height: 98vh;
-    background-color: var(--oxford-blue);
+    background-image: url("../IMG/background.jpg");
+    background-size: cover;
+   
 }
 
 div{
