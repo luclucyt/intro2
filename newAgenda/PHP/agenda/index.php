@@ -131,12 +131,59 @@
                         <input type="text" name="share-input" placeholder="Gebruikersnaam" class="share-input">
                         <input type="submit" name="share-submit" value="Deel" class="share-submit">
                     </form>
+
+                    <form method="POST" action="">
+                        <input type="submit" value="Google Agenda" name="GoogleAgenda">
+                    </form>
+
                 </div>
             </div>
 
             <div class="agenda-hide-wrapper">
+                
+        <?php 
+            
+            if(isset($_POST['GoogleAgenda'])){
+                $fileName = "../../GoogleCalender/".$_SESSION['userID'].".ics";
+                $agendaFile = fopen($fileName, 'a');
+                
+                file_put_contents($fileName, "");
+
+                fwrite($agendaFile, "BEGIN:VCALENDAR\n");
+                fwrite($agendaFile, "VERSION:2.0\n\n");
+
+                $sqlAgenda = "SELECT * FROM agenda WHERE userID = '$userID'";
+                $resultAgenda = mysqli_query($connection, $sqlAgenda);
+                while ($row = mysqli_fetch_assoc($resultAgenda)) {
+                    fwrite($agendaFile, "BEGIN:VEVENT\n");
+                    fwrite($agendaFile, "DTSTART:". str_replace('-', '' , $row['startDatum'])."T". str_replace(':', '' , $row['startTijd'])."\n");
+                    fwrite($agendaFile, "DTEND:".str_replace('-', '' , $row['eindDatum'])."T".str_replace(':', '' , $row['eindTijd'])."\n");
+                    fwrite($agendaFile, "SUMMARY:".$row['naam']."\n");
+                    fwrite($agendaFile, "DESCRIPTION:".$row['omschrijving']."\n");
+                    fwrite($agendaFile, "END:VEVENT\n\n");
+                }
+
+                fwrite($agendaFile, "END:VCALENDAR\n");
+
+                fclose($agendaFile);
+
+                //copy the link to the clipboard
+                $link = "http://".$_SERVER['SERVER_NAME']."/PHP/GoogleCalender/".$_SESSION['userID'].".ics";
+                $link = str_replace('/PHP', '', $link);
+
+                echo "<script> 
+                    let link = '$link';
+                    navigator.clipboard.writeText(link);
+                </script>";                
+
+                echo "<script>alert('je wordt door gestuurnd naar google agenda, plak daar de link er in.');</script>";
+                //echo "<script>window.location.href = 'https://calendar.google.com/calendar/u/0/r/settings/addbyurl'</script>";
+            }   
+        
+        ?>
             </div>
         </section>
+
 
         <?php 
             //if color is deleted
@@ -166,39 +213,39 @@
 
         
 
-        
-        <div class="main-main-agenda-wrapper">
-
-            <div class='agenda-line-wrapper'>
-                <?php
-                    for($i = 1; $i <= 7; $i++){
-                        echo "<div class='agenda-day-line'></div>";
-                    }
-                ?>
-            </div>
-        
-            <div class='agenda-grid-wrapper'>
-                
-                <div class="agenda-times">
-                    <?php 
-                        for($i = 0; $i <= 23; $i++){ 
-                        echo '<div class="time-wrapper">
-                                <!-- <div class="time-header"><label>'.$i.' uur</label></div> -->
-                                <div class="time-line"></div>
-                            </div> ';
+        <section class="main-agenda-wrapper">
+            <div class="agenda-wrapper">
+                <div class='agenda-line-wrapper'>
+                    <?php
+                        for($i = 1; $i <= 7; $i++){
+                            echo "<div class='agenda-day-line'></div>";
                         }
                     ?>
                 </div>
-                        
-                <?php require_once 'displayAgendaItems.php'; ?>
+            
+                <div class='agenda-grid-wrapper'>
+                    <div class="agenda-times">
+                        <?php 
+                            for($i = 0; $i <= 23; $i++){ 
+                            echo '<div class="time-wrapper">
+                                    <div class="time-header"><label>'.$i.' uur</label></div>
+                                    <div class="time-line"></div>
+                                </div> ';
+                            }
+                        ?>
+                    </div>
+                            
+                    <?php require_once 'displayAgendaItems.php'; ?>
+                </div>
             </div>
-        </div>
-   </main>
+        </section>
+    </main>
+
 </body>
 </html>
 
 <script>
-    let agenda_wrapper = document.getElementsByClassName('agenda-grid-wrapper')[0];
+    const agendaGrid = document.querySelector('agenda-grid-wrapper')
     let start_timeInverted = false;
     let row_amount = 92;
     let colom_amount = 7;
@@ -220,31 +267,31 @@
 
     agenda_wrapper.addEventListener('mousedown', function(event) {
 
-    if (event.target === agenda_wrapper) {
-        //mouse is pressed on the agenda
-        is_dragging = true;
-        start_row = get_row(event)[0] + 1;
-        start_time = get_row(event)[1];
+        if (event.target === agenda_wrapper) {
+            //mouse is pressed on the agenda
+            is_dragging = true;
+            start_row = get_row(event)[0] + 1;
+            start_time = get_row(event)[1];
 
-        colom = get_colom(event)[0] + 1;
+            colom = get_colom(event)[0] + 1;
 
-        week_start = document.getElementById('week_start').value;
-        week_start = new Date(week_start);
+            week_start = document.getElementById('week_start').value;
+            week_start = new Date(week_start);
 
-        start_date = new Date(week_start);
-        start_date.setDate(week_start.getDate() + get_colom(event)[1]);
+            start_date = new Date(week_start);
+            start_date.setDate(week_start.getDate() + get_colom(event)[1]);
 
-        start_date = start_date.toISOString().substring(0, 10)
+            start_date = start_date.toISOString().substring(0, 10)
 
-        //document.getElementById('agenda-start-time').value = start_time;
+            //document.getElementById('agenda-start-time').value = start_time;
 
 
-        //remove all the temp agenda items
-        let temp_items = document.querySelectorAll('.agenda-item-temp');
-        temp_items.forEach(function (item) {
-            item.remove();
-        });
-    }
+            //remove all the temp agenda items
+            let temp_items = document.querySelectorAll('.agenda-item-temp');
+            temp_items.forEach(function (item) {
+                item.remove();
+            });
+        }
 
     });
 
