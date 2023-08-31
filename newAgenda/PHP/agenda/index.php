@@ -144,29 +144,6 @@
         <?php 
             
             if(isset($_POST['GoogleAgenda'])){
-                $fileName = "../../GoogleCalender/".$_SESSION['userID'].".ics";
-                $agendaFile = fopen($fileName, 'a');
-                
-                file_put_contents($fileName, "");
-
-                fwrite($agendaFile, "BEGIN:VCALENDAR\n");
-                fwrite($agendaFile, "VERSION:2.0\n\n");
-
-                $sqlAgenda = "SELECT * FROM agenda WHERE userID = '$userID'";
-                $resultAgenda = mysqli_query($connection, $sqlAgenda);
-                while ($row = mysqli_fetch_assoc($resultAgenda)) {
-                    fwrite($agendaFile, "BEGIN:VEVENT\n");
-                    fwrite($agendaFile, "DTSTART:". str_replace('-', '' , $row['startDatum'])."T". str_replace(':', '' , $row['startTijd'])."\n");
-                    fwrite($agendaFile, "DTEND:".str_replace('-', '' , $row['eindDatum'])."T".str_replace(':', '' , $row['eindTijd'])."\n");
-                    fwrite($agendaFile, "SUMMARY:".$row['naam']."\n");
-                    fwrite($agendaFile, "DESCRIPTION:".$row['omschrijving']."\n");
-                    fwrite($agendaFile, "END:VEVENT\n\n");
-                }
-
-                fwrite($agendaFile, "END:VCALENDAR\n");
-
-                fclose($agendaFile);
-
                 //copy the link to the clipboard
                 $link = "http://".$_SERVER['SERVER_NAME']."/PHP/GoogleCalender/".$_SESSION['userID'].".ics";
                 $link = str_replace('/PHP', '', $link);
@@ -177,7 +154,7 @@
                 </script>";                
 
                 echo "<script>alert('je wordt door gestuurnd naar google agenda, plak daar de link er in.');</script>";
-                //echo "<script>window.location.href = 'https://calendar.google.com/calendar/u/0/r/settings/addbyurl'</script>";
+                echo "<script>window.open('https://calendar.google.com/calendar/u/0/r/settings/addbyurl', '_blank')</script>";
             }   
         
         ?>
@@ -245,46 +222,43 @@
 </html>
 
 <script>
-    const agendaGrid = document.querySelector('agenda-grid-wrapper')
-    let start_timeInverted = false;
-    let row_amount = 92;
+    const agendaGrid = document.querySelector('.agenda-grid-wrapper')
+    
+    let isTimeInverted = false;
+    let row_amount = 24 * 4;
     let colom_amount = 7;
 
-    let is_dragging = false;
+    let isMouseDown = false;
 
-    let week_start;
-    let day_offset;
+    let weekStart;
+    let dayOffset;
 
-    let start_row = 0;
-    let start_time = 0;
+    let startRow = 0;
+    let startTime = 0;
 
-    let start_date;
+    let startDate;
 
-    let end_row = 0;
-    let end_time = 0;
+    let endRow = 0;
+    let endTime = 0;
 
     let colom = 0;
 
-    agenda_wrapper.addEventListener('mousedown', function(event) {
-
-        if (event.target === agenda_wrapper) {
+    agendaGrid.addEventListener('mousedown', function(event) {
+        if (event.target === agendaGrid) {
             //mouse is pressed on the agenda
-            is_dragging = true;
-            start_row = get_row(event)[0] + 1;
-            start_time = get_row(event)[1];
+            isMouseDown = true;
+            startRow = get_row(event)[0] -1;
+            startTime = get_row(event)[1];
 
             colom = get_colom(event)[0] + 1;
 
-            week_start = document.getElementById('week_start').value;
-            week_start = new Date(week_start);
+            weekStart = document.getElementById('week_start').value;
+            weekStart = new Date(weekStart);
 
-            start_date = new Date(week_start);
-            start_date.setDate(week_start.getDate() + get_colom(event)[1]);
+            startDate = new Date(weekStart);
+            startDate.setDate(weekStart.getDate() + get_colom(event)[1]);
 
-            start_date = start_date.toISOString().substring(0, 10)
-
-            //document.getElementById('agenda-start-time').value = start_time;
-
+            startDate = startDate.toISOString().substring(0, 10)
 
             //remove all the temp agenda items
             let temp_items = document.querySelectorAll('.agenda-item-temp');
@@ -293,13 +267,16 @@
             });
         }
 
+        console.log(event);
+        console.log(get_row(event));
+
     });
 
-    agenda_wrapper.addEventListener('mousemove', function(event) {
-        if(is_dragging === true){
+    agendaGrid.addEventListener('mousemove', function(event) {
+        if(isMouseDown === true){
             //mouse is moving on the agenda and is pressed
-            end_row = get_row(event)[0];
-            end_time = get_row(event)[1];
+            endRow = get_row(event)[0];
+            endTime = get_row(event)[1];
 
             //remove all the temp agenda items
             let temp_items = document.querySelectorAll('.agenda-item-temp');
@@ -309,25 +286,28 @@
 
 
             let agenda_item_temp = document.createElement('div');
+            agendaGrid.appendChild(agenda_item_temp);
+           
             agenda_item_temp.classList.add('agenda-item-temp');
 
-            agenda_wrapper.appendChild(agenda_item_temp);
 
-            agenda_item_temp.style.gridRowStart = start_row;
-            agenda_item_temp.style.gridRowEnd = end_row;
+            agenda_item_temp.style.gridRowStart = startRow;
+            agenda_item_temp.style.gridRowEnd = endRow;
 
             agenda_item_temp.style.gridColumn = colom;
 
             agenda_item_temp.style.backgroundColor = '#22007c';
             agenda_item_temp.style.border = '1px solid whites';
 
-            if (start_time > end_time){
-                let temp = start_time;
-                start_time = end_time;
-                end_time = temp;
+            if (startTime > endTime){
+                let temp = startTime;
+                startTime = endTime;
+                endTime = temp;
 
-                start_timeInverted = true;
+                isTimeInverted = true;
             }
+
+
 
             document.getElementsByClassName('agenda-item-temp')[0].innerHTML = `
             <form method="POST" action="" autocomplete="off" id="add-to-agenda-form">
@@ -336,7 +316,7 @@
 
                     <input type="text" name="agenda-omschrijving" placeholder="Omschrijving" id="agenda-omschrijving">
 
-                    <p id="end-start-time">` + start_time + ` - ` + end_time + `</p>
+                    <p id="end-start-time">` + startTime + ` - ` + endTime + `</p>
 
 
                     <label For="agenda-functie">Kies een functie: </label>
@@ -364,33 +344,32 @@
                     <input type="color" name="agenda-kleur" placeholder="AgendaKleur" id="agenda-kleur" value="#22007c" hidden><br>
 
                     <input type="date" name="agenda-start-datum" placeholder="AgendaDatum" id="agenda-start-date" hidden>
-                    <input type="time" name="agenda-start-tijd" placeholder="AgendaStartTijd" value="` + start_time + `" id="agenda-start-time" hidden><br>
-                    <input type="time" name="agenda-eind-tijd" placeholder="AgendaEindTijd" value="` + end_time + `" id="agenda-eind-time" hidden><br>
+                    <input type="time" name="agenda-start-tijd" placeholder="AgendaStartTijd" value="` + startTime + `" id="agenda-start-time" hidden><br>
+                    <input type="time" name="agenda-eind-tijd" placeholder="AgendaEindTijd" value="` + endTime + `" id="agenda-eind-time" hidden><br>
 
                 </div>
                 <button type="submit" name="agenda-submit" id="agenda-submit">Voeg to aan de Agenda</button>
             </form>
              `;
 
-            if(start_timeInverted === true){
-                let temp = start_time;
-                start_time = end_time;
-                end_time = temp;
 
-                start_timeInverted = false;
+            if(isTimeInverted === true){
+                let temp = startTime;
+                startTime = endTime;
+                endTime = temp;
+
+                isTimeInverted = false;
             }
 
             document.getElementById('agenda-naam').addEventListener('input', function(event){
                 let input = event.target.value;
                 input = input.charAt(0).toUpperCase() + input.slice(1);
-                console.log(input);
                 document.getElementById('agenda-naam').value = input;
             });
 
             document.getElementById('agenda-omschrijving').addEventListener('input', function(event){
                 let input = event.target.value;
                 input = input.charAt(0).toUpperCase() + input.slice(1);
-                console.log(input);
                 document.getElementById('agenda-omschrijving').value = input;
             });
         }
@@ -399,9 +378,9 @@
     });
 
 
-    agenda_wrapper.addEventListener('mouseup', function() {
+    agendaGrid.addEventListener('mouseup', function() {
         //mouse is not pressed on the agenda anymore
-        is_dragging = false;
+        isMouseDown = false;
 
         document.getElementById('agenda-functie').addEventListener('input', function(event){
             document.getElementsByClassName('agenda-item-temp')[0].style.backgroundColor = event.target.value;
@@ -411,33 +390,32 @@
         document.getElementsByClassName('agenda-item-temp')[0].style.backgroundColor = document.getElementById('agenda-functie').value;
         document.getElementById('agenda-kleur').value = document.getElementById('agenda-functie').value;
 
-        document.getElementById('agenda-start-date').value = start_date;
+        document.getElementById('agenda-start-date').value = startDate;
     });
 
     
     function get_row(event){
-        let rect = agenda_wrapper.getBoundingClientRect();
+        let rect = agendaGrid.getBoundingClientRect();
         let y = event.clientY - rect.top;
-        let row_height = agenda_wrapper.clientHeight / row_amount;
-        row_height = 14;
+        let row_height = rect.height / row_amount;
 
         //calucate the time that corresponds to the row (1 row = 15 minutes)
-        let time = Math.floor(y / row_height) * 15;
+        let time = Math.ceil(y / row_height) * 15;
         let hours = Math.floor(time / 60);
         let minutes = time % 60;
 
         // format the time value so it can be used in the input field
         let formatted_time = hours.toString().padStart(2, '0') + ':' + minutes.toString().padStart(2, '0');
 
-        //console.log(formatted_time);
-
-        return [Math.floor(y / row_height), formatted_time];
+        return [(Math.ceil(y / row_height) + 1), formatted_time];
     }
 
     function get_colom(event){
-        let rect = agenda_wrapper.getBoundingClientRect();
+        let clickX = event.offsetX;
+
+        let rect = agendaGrid.getBoundingClientRect();
         let x = event.clientX - rect.left;
-        let colom_width = agenda_wrapper.clientWidth / colom_amount;
+        let colom_width = agendaGrid.offsetWidth / colom_amount;
 
         //calucate the day ofset that corresponds to the colom
         day_offset = Math.floor(x / colom_width);
@@ -447,7 +425,7 @@
 </script>
 
 <?php
-       function displayWeekDateHeader() {
+    function displayWeekDateHeader() {
         //set the week start and end date in the session (if not already set)
         if(!isset($_SESSION['week_start']) || !isset($_SESSION['week_end'])) {
             $date = date('Y-m-d');

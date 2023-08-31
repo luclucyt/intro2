@@ -27,8 +27,6 @@ main{
     padding-top: 20px;
 
     background-color: var(--black-transparent);
-    backdrop-filter: blur(5px);
-    -webkit-backdrop-filter: blur(5px);
     border-radius: 0 0 16px 16px;
 }
 
@@ -58,10 +56,8 @@ main{
     display: grid;
     grid-template-columns: repeat(7, 1fr);
     grid-template-rows: repeat(96, 15px);
-    /* grid-column-gap: 10px; */
 
     width: calc(70vw + 15px);
-    height: 100%;
     overflow-y: visible;
     overflow-x: visible;
     scroll-margin-top: 200px;
@@ -92,10 +88,9 @@ main{
 }
 .agenda-day-line{
     width: 1px;
-    background: rgb(127, 119, 119);
-    opacity: 0.75;
+    background: var(--white);
     border-radius: 10px;
-    height: 95vh;
+    height: 86.60vh;
     margin-top: -4vh
 }
 
@@ -115,7 +110,6 @@ main{
     left: -1vw;
     top: 0;
     height: 1px;
-    opacity: 0.75;
     background: var(--text);
 
     z-index: -1;

@@ -18,14 +18,6 @@ for (let i = 0; i < agenda_view_users.length; i++) {
     })
 }
 
-let shareInput = document.getElementsByClassName("share-display-form-input")[0]
-
-
-//on input post to php, and return the result
-shareInput.addEventListener("input", function(event) {
-    updateShare(event.target.value)
-})
-
 
 function updateShare(username){
     let shareInputValue = username
@@ -58,33 +50,6 @@ function updateShare(username){
 
 
 
-const div = document.querySelector('.main-main-agenda-wrapper');
-const scrollThreshold = 150; // the number of pixels near the top/bottom edge to trigger auto-scrolling
-
-let isMouseDown = false;
-div.addEventListener('mousedown', () => {
-    isMouseDown = true;
-});
-
-div.addEventListener('mouseup', () => {
-    isMouseDown = false;
-});
-
-div.addEventListener('mousemove', (e) => {
-    if (isMouseDown) {
-        const rect = div.getBoundingClientRect();
-        const topThreshold = rect.top + scrollThreshold;
-        const bottomThreshold = rect.bottom - scrollThreshold;
-
-        if (e.clientY < topThreshold) {
-            div.scrollBy(0, -5); // scroll up by 10 pixels
-        } else if (e.clientY > bottomThreshold) {
-            div.scrollBy(0, 5); // scroll down by 10 pixels
-        }
-    }
-});
-
-
 
 document.getElementById('filter-functie').addEventListener('input', function (){
            
@@ -111,37 +76,4 @@ document.getElementById('filter-functie').addEventListener('input', function (){
 });
 
 
-
-//share button/display
-let isOpen = true;
-toggleShareWrapper();
-
-document.getElementsByClassName("header-share-input")[0].addEventListener('click', function() {
-    toggleShareWrapper();
-});
-
-document.getElementsByClassName("share-display-wrapper")[0].addEventListener('click', function(event) {
-    //if it is not any of the children of the share-wrapper
-    if(event.target === this) {
-        toggleShareWrapper();
-    }
-});
-
-function toggleShareWrapper() {
-    let shareWrapper = document.getElementsByClassName("share-display-wrapper")[0];
-    if(isOpen === false){
-        shareWrapper.style.width = "100%";
-        shareWrapper.style.height = "100%";
-        shareWrapper.style.display = "flex";
-        shareWrapper.style.backgroundColor = "rgba(0, 0, 0, 0.5)";
-        isOpen = true;
-    }else{
-        shareWrapper.style.width = "0%";
-        shareWrapper.style.height = "0%";
-        shareWrapper.style.display = "none";
-        shareWrapper.style.backgroundColor = "rgba(0, 0, 0, 0)";
-        isOpen = false;
-    }
-}
-
-document.getElementsByClassName("main-main-agenda-wrapper")[0].scrollTop = 400;
+document.getElementsByClassName("agenda-grid-wrapper")[0].scrollTop = 400;

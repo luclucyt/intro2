@@ -44,7 +44,6 @@
         $agenda_kleur = mysqli_real_escape_string($connection, $agenda_kleur);
 
         //insert the data into the database
-
         $sqlAgenda = "INSERT INTO agenda (id, userID, naam, omschrijving, startDatum, eindDatum, startTijd, eindTijd, taak, functie, kleur) VALUES ('', '$userID', '$agenda_naam' , '$agenda_omschrijving', '$agenda_start_datum', '$agenda_eind_datum', '$agenda_start_tijd', '$agenda_eind_tijd', 'false', '$agenda_functie', '$agenda_kleur')";
 
         //run the query in the database
@@ -66,7 +65,30 @@
             $agendaItemtaak = $row['taak'];
             $agendaItemFunctie = $row['functie'];
             $agendaItemKleur = $row['kleur'];
-
-
         }
+
+        //rewrite the ICS file so we can add it if needed to google agenda
+        $fileName = "../../GoogleCalender/".$_SESSION['userID'].".ics";
+        $agendaFile = fopen($fileName, 'a');
+        
+        file_put_contents($fileName, "");
+
+        fwrite($agendaFile, "BEGIN:VCALENDAR\n");
+        fwrite($agendaFile, "VERSION:2.0\n\n");
+
+        $sqlAgenda = "SELECT * FROM agenda WHERE userID = '$userID'";
+        $resultAgenda = mysqli_query($connection, $sqlAgenda);
+        while ($row = mysqli_fetch_assoc($resultAgenda)) {
+            fwrite($agendaFile, "BEGIN:VEVENT\n");
+            fwrite($agendaFile, "DTSTART:". str_replace('-', '' , $row['startDatum'])."T". str_replace(':', '' , $row['startTijd'])."\n");
+            fwrite($agendaFile, "DTEND:".str_replace('-', '' , $row['eindDatum'])."T".str_replace(':', '' , $row['eindTijd'])."\n");
+            fwrite($agendaFile, "SUMMARY:".$row['naam']."\n");
+            fwrite($agendaFile, "DESCRIPTION:".$row['omschrijving']."\n");
+            fwrite($agendaFile, "END:VEVENT\n\n");
+        }
+
+        fwrite($agendaFile, "END:VCALENDAR\n");
+
+        fclose($agendaFile);
+
     }
