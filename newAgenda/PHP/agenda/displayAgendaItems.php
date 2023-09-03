@@ -42,24 +42,28 @@ if($resultCheckAccess > 0) {
                 $agenda_item_kleur = $row['kleur'];
 
                 echo "<div class='agenda-item agenda-date{$dayDifference} {$agenda_item_functie} userID{$userID}' id='agendaID{$agenda_item_id1} ' style='background-color:{$agenda_item_functie}; grid-row-start:{$startRow};grid-row-end:{$endRow};'>";
-                    echo "<h1 class='agenda-item-header'>{$agenda_item_naam}</h1>";
-                    echo "<p class='agenda-item-omschrijving'>{$agenda_item_omschrijving}</p>";
-                    echo "<p>{$agenda_item_startTijd} - {$agenda_item_eindTijd}</p>";
+                    echo "<div class='change-time-item change-time-item-top'></div>";
+                    echo "<form method='POST' action='' class='agenda-form'>";
+                        echo "<input type='hidden' name='id' value='{$agenda_item_id1}'>";
+                        echo "<input type='text' name='agenda-item-naam' value='{$agenda_item_naam}' class='agenda-item-naam'>";
+                        echo "<input type='text' name='agenda-item-omschrijving' value='{$agenda_item_omschrijving}' class='agenda-item-omschrijving'>";
+                        echo "<input type='time' name='agenda-item-start-tijd' value='{$agenda_item_startTijd}' class='agenda-item-start-tijd'>";
+                        echo "<input type='time' name='agenda-item-eind-tijd' value='{$agenda_item_eindTijd}' class='agenda-item-eind-tijd'>";
 
                         echo "<div class='agenda-form-wrapper'>";
 
-                            //check if the user is the owner of the agenda item
-                            if($userID == $_SESSION['userID']) {
-                                //delete button
-                                echo "<form method='POST' action='index.php'>";
-                                    echo "<input type='hidden' name='id' value='{$agenda_item_id1}'>";
-                                    echo "<button type='submit' name='agenda-delete' class='agenda-delete'>Verwijder</button>";
-                                echo "</form>";
-                            }
+                            echo "<form method='POST' action='index.php'>";
+                                echo "<input type='hidden' name='id' value='{$agenda_item_id1}'>";
+                                echo "<button type='submit' name='agenda-delete' class='agenda-delete'>Verwijder</button>";
+                            echo "</form>";
                         echo "</div>";
+                    echo "</form>";
+                    echo "<div class='change-time-item change-time-item-bottom'></div>";
 
                 //close the agenda item
                 echo "</div>";
+
+                
             }
         }
 
@@ -71,7 +75,7 @@ if($resultCheckAccess > 0) {
                 $user = $rowUsers['username'];
                 $ID = $rowUsers['id'];
 
-                echo "<script>document.getElementsByClassName('agenda-hide-wrapper')[0].innerHTML += `<label for='{$user}'>{$user}</label><input type='checkbox' value='userID{$ID}' name'{$user}' checked class='agenda-view-users'><br>`</script>";
+                // echo "<script>document.getElementsByClassName('agenda-hide-wrapper')[0].innerHTML += `<label for='{$user}'>{$user}</label><input type='checkbox' value='userID{$ID}' name'{$user}' checked class='agenda-view-users'><br>`</script>";
             }
         }
         $userID = $_SESSION['userID'];

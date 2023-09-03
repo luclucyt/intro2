@@ -28,75 +28,42 @@
 
 .filter-wrapper::before{
     left: -16px;
-    background: radial-gradient(circle at bottom left, transparent 15px, rgba(0,0,0,0.4) 16px);
+    background: radial-gradient(circle at bottom left, transparent 15px, var(--black-transparent) 16px);
 }
 
 .filter-wrapper::after{
     right: -16px;
-    background: radial-gradient(circle at bottom right, transparent 15px, rgba(0,0,0,0.4) 16px);
+    background: radial-gradient(circle at bottom right, transparent 15px, var(--black-transparent) 16px);
 }
 
-.functie-line{
-    width: 100%;
-    background: var(--text);
-    opacity: 0.75;
-    height: 1px;
-    display: block;
-    border-radius: 10px;
-}
 
-.functie-wrapper{
-    border-radius: 10px;
-
-    width: 100%;
-    padding: 1%;
-
-
-    overflow-x: hidden;
-    scrollbar-width: thin;
-
-    box-sizing: border-box;
-}
-
-.functie-wrapper form{
-    width: 12vw;
-}
-
-#new-functie{
-    width: 90%;
+#new-functie, #new-color{
+    width: 11vw;
     height: 50px;
     border-radius: 10px;
-    border: 1px solid var(--text);
-    background: var(--oxford-blue);
-    color: var(--text);
+    border: 1px solid var(--white);
+    background: var(--black-transparent);
+    color: var(--white);
     font-weight: bold;
     cursor: text;
 
     transition: all 0.2s ease-in-out;
     margin: 5%;
+    padding: 0 5% 0 5%;
+    box-sizing: border-box;
 }
 
 #new-color{
-    border-radius: 10px;
-    width: 90%;
-    height: 50px;
-    border: 1px solid var(--text);
-    background: var(--oxford-blue);
-    color: var(--text);
-    font-weight: bold;
     cursor: pointer;
-
-    transition: all 0.2s ease-in-out;
-    margin: 5%;
 }
 
 .new-color-submit{
     width: 50%;
     height: 50px;
     border-radius: 10px;
-    border: 1px solid var(--text);
-    background: var(--oxford-blue);
-    color: var(--text);
+    border: 1px solid var(--white);
+    background: var(--black-transparent);
+    color: var(--white);
     font-weight: bold;
     cursor: pointer;
 
@@ -104,8 +71,8 @@
     margin: 5%;
 }
 .new-color-submit:hover{
-    background: var(--text);
-    color: var(--oxford-blue);
+    background: var(--white);
+    color: var(--black);
 }
 
 .remove-functie-wrapper{
@@ -122,9 +89,9 @@
     width: 90%;
     height: 50px;
     border-radius: 10px;
-    border: 1px solid var(--text);
+    border: 1px solid var(--white);
     background: var(--oxford-blue);
-    color: var(--text);
+    color: var(--white);
     font-weight: bold;
     cursor: pointer;
 
@@ -136,9 +103,9 @@
     width: 50%;
     height: 50px;
     border-radius: 10px;
-    border: 1px solid var(--text);
+    border: 1px solid var(--white);
     background: var(--oxford-blue);
-    color: var(--text);
+    color: var(--white);
     font-weight: bold;
     cursor: pointer;
 
@@ -147,7 +114,7 @@
 }
 
 .remove-color-submit:hover{
-    background: var(--text);
+    background: var(--white);
     color: var(--oxford-blue);
 }
 

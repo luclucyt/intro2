@@ -1,7 +1,4 @@
 :root{
-    --text:  rgb(230, 230, 230);
-
-    --black: rgb(2, 1, 10);
     --oxford-blue: rgb(4, 5, 46);
     --federal-blue: rgb(20, 1, 82);
     --neavy-blue: rgb(34, 0, 124);
@@ -19,25 +16,22 @@
 
 *{
     font-family: Arial, Helvetica, sans-serif;
-
     user-select: none;
 }
 
 /* text */
-h1, h2, h3, h4, h5, h6, p, li, a, button, input, textarea, select, option, label, i{
-    color: var(--text);
+h1, h2, h3, h4, h5, h6, p, li, a, button, textarea, select, option, label, i{
+    color: var(--white);
 }
 
 body{
     min-height: 98vh;
-    background-image: url("../IMG/background.jpg");
+    background-image: url("../IMG/background-dark.png");
     background-size: cover;
-   
 }
 
 div{
     scrollbar-width: thin;
-    scrollbar-color: var(--neavy-blue) var(--oxford-blue);
 }
 
 /*width */
@@ -47,19 +41,21 @@ div::-webkit-scrollbar{
 
 /* Track */
 div::-webkit-scrollbar-track {
-    background: var(--oxford-blue);
+    background: var(--black-transparent);
 }
 
 /* Handle */
 div::-webkit-scrollbar-thumb {
-    background: var(--neavy-blue);
-    border-left: 3px solid var(--oxford-blue);
-    border-right: 3px solid var(--oxford-blue);
+    background: var(--black);
+    border-radius: 10px;
+    border-left: 3px solid transparent;
+    border-right: 3px solid transparent;
 
 }
 
 /* Handle on hover */
 div::-webkit-scrollbar-thumb:hover {
-    background: var(--dark-blue);
+    background: var(--black);
+    border-radius: 10px;
 }
 
