@@ -1,3 +1,26 @@
+.accordion-item-header{
+    cursor: pointer;
+}
+.accordion-item{
+    width: 100%;
+    background-color: var(--black-transparent);
+    margin: 5%;
+    padding: 0% 5% 0% 5%;
+    border-radius: 16px;
+}
+.accordion-content {
+    max-height: 0;
+    overflow: hidden;
+    transform-origin: top;
+    transition: max-height 0.3s ease-in-out, transform 0.3s ease-in-out;
+}
+
+.open > .accordion-content {
+    max-height: 1000px; /* Set a value that is larger than your content */
+    transform: scaleY(1);
+}
+
+
 .filter-wrapper {
     background-color: var(--black-transparent);
     backdrop-filter: blur(5px);
@@ -75,22 +98,12 @@
     color: var(--black);
 }
 
-.remove-functie-wrapper{
-    background-color: var(--neavy-blue);
-    border-radius: 10px;
-
-    padding: 1%;
-
-    width: 100%;
-    height: fit-content;
-}
-
 #remove-color-select{
-    width: 90%;
+    width: 11vw;
     height: 50px;
     border-radius: 10px;
     border: 1px solid var(--white);
-    background: var(--oxford-blue);
+    background: var(--black-transparent);
     color: var(--white);
     font-weight: bold;
     cursor: pointer;
@@ -104,7 +117,7 @@
     height: 50px;
     border-radius: 10px;
     border: 1px solid var(--white);
-    background: var(--oxford-blue);
+    background: var(--black-transparent);
     color: var(--white);
     font-weight: bold;
     cursor: pointer;
@@ -115,28 +128,33 @@
 
 .remove-color-submit:hover{
     background: var(--white);
-    color: var(--oxford-blue);
+    color: var(--black);
 }
 
-.accordion-item-header{
+#filter-functie{
+    width: 11vw;
+    height: 50px;
+    border-radius: 10px;
+    border: 1px solid var(--white);
+    background: var(--black-transparent);
+    color: var(--white);
+    font-weight: bold;
     cursor: pointer;
-}
-.accordion-item{
-    width: 100%;
-    background-color: var(--black-transparent);
+
+    transition: all 0.2s ease-in-out;
     margin: 5%;
-    padding: 0% 5% 0% 5%;
-    border-radius: 16px;
-}
-.accordion-content {
-    max-height: 0;
-    overflow: hidden;
-    transform-origin: top;
-    transition: max-height 0.3s ease-in-out, transform 0.3s ease-in-out;
 }
 
-.open > .accordion-content {
-    max-height: 1000px; /* Set a value that is larger than your content */
-    transform: scaleY(1);
-}
+.share{
+    width: 11vw;
+    height: 50px;
+    border-radius: 10px;
+    border: 1px solid var(--white);
+    background: var(--black-transparent);
+    color: var(--white);
+    font-weight: bold;
+    cursor: pointer;
 
+    transition: all 0.2s ease-in-out;
+    margin: 5%;
+}

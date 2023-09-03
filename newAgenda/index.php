@@ -29,10 +29,10 @@
 </head>
 
 <body>
-    <?php include '../forceLogin.php' ?>
-    <?php include '../connectDatabase.php'; ?>
-    <?php include 'agendaItems.php'; ?>
-    <?php include 'functions.php'; ?>
+    <?php include 'PHP/forceLogin.php' ?>
+    <?php include 'PHP/connectDatabase.php'; ?>
+    <?php include 'PHP/agenda/agendaItems.php'; ?>
+    <?php include 'PHP/agenda/functions.php'; ?>
     
     <header class="header">
         <div class="control-date">
@@ -49,7 +49,7 @@
             </form>
 
             <!-- change week --> 
-            <?php include 'changeWeek.php'; ?>
+            <?php include 'PHP/agenda/changeWeek.php'; ?>
         </div>
 
         <div class="agenda-header">
@@ -129,7 +129,7 @@
                 <div class="accordion-content">
                 
                     <form method="POST" action="">
-                        <input type="submit" value="Google Agenda" name="GoogleAgenda">
+                        <input type="submit" value="Google Agenda" name="GoogleAgenda" class="share">
                     </form>
 
                 </div>
@@ -179,7 +179,7 @@
                         
                     <div class='current-time-line'></div>
                     
-                    <?php require_once 'displayAgendaItems.php'; ?>
+                    <?php require_once 'PHP/agenda/displayAgendaItems.php'; ?>
                 </div>
             </div>
         </section>
@@ -219,12 +219,8 @@
         if(weekStart.getDate() === Today.getDate()){
             todayColom = i;
         }
-
         weekStart.setDate(weekStart.getDate() + 1);
-        
     }
-
-    
    
     document.querySelector('.current-time-line').style.gridColumn = todayColom + 1;
     document.querySelector('.current-time-line').style.marginTop =  timeOffset + 'px';
@@ -295,14 +291,12 @@
            
             agenda_item_temp.classList.add('agenda-item-temp');
 
+            agenda_item_temp.style.backgroundColor = 'var(--iron)'
 
             agenda_item_temp.style.gridRowStart = startRow;
             agenda_item_temp.style.gridRowEnd = endRow;
 
             agenda_item_temp.style.gridColumn = colom;
-
-            agenda_item_temp.style.backgroundColor = '#22007c';
-            agenda_item_temp.style.border = '1px solid whites';
 
             if (startTime > endTime){
                 let temp = startTime;
@@ -311,20 +305,23 @@
 
                 isTimeInverted = true;
             }
-
-
-
             document.getElementsByClassName('agenda-item-temp')[0].innerHTML = `
             <form method="POST" action="" autocomplete="off" id="add-to-agenda-form">
                 <div>
-                    <input type="text" name="agenda-naam" placeholder="Titel" value="" id="agenda-naam" required oninvalid="this.setCustomValidity('Vul een titel in')" onchange="this.setCustomValidity('')"><br>
+                    <input type="text" name="agenda-naam" placeholder="Title" value="" id="agenda-naam" required oninvalid="this.setCustomValidity('Vul een titel in')" onchange="this.setCustomValidity('')"><br>
 
-                    <input type="text" name="agenda-omschrijving" placeholder="Omschrijving" id="agenda-omschrijving">
+                    <textarea type="text" name="agenda-omschrijving" placeholder="Description" id="agenda-omschrijving"></textarea>
 
-                    <p id="end-start-time">` + startTime + ` - ` + endTime + `</p>
+                    <input type="time" name="agenda-start-tijd" placeholder="AgendaStartTijd" value="` + startTime + `" id="agenda-start-time" hidden>
+                    <input type="time" name="agenda-eind-tijd" placeholder="AgendaEindTijd" value="` + endTime + `" id="agenda-eind-time" hidden>
 
+                    <div class="agenda-item-tijd">` + startTime + ` - ` + endTime + `</div>
 
-                    <label For="agenda-functie">Kies een functie: </label>
+                    <select name="agenda-repeat-item" id="agenda-repeat">
+                        <option value="0">Do not repeat</option>
+                        <option value="1">Every week</option>
+                    </select><br>
+
                     <select name="agenda-functie" id="agenda-functie">
 
                         <?php
@@ -336,9 +333,6 @@
                     <input type="color" name="agenda-kleur" placeholder="AgendaKleur" id="agenda-kleur" value="#22007c" hidden><br>
 
                     <input type="date" name="agenda-start-datum" placeholder="AgendaDatum" id="agenda-start-date" hidden>
-                    <input type="time" name="agenda-start-tijd" placeholder="AgendaStartTijd" value="` + startTime + `" id="agenda-start-time" hidden><br>
-                    <input type="time" name="agenda-eind-tijd" placeholder="AgendaEindTijd" value="` + endTime + `" id="agenda-eind-time" hidden><br>
-
                 </div>
                 <button type="submit" name="agenda-submit" id="agenda-submit">Voeg to aan de Agenda</button>
             </form>
@@ -352,18 +346,6 @@
 
                 isTimeInverted = false;
             }
-
-            document.getElementById('agenda-naam').addEventListener('input', function(event){
-                let input = event.target.value;
-                input = input.charAt(0).toUpperCase() + input.slice(1);
-                document.getElementById('agenda-naam').value = input;
-            });
-
-            document.getElementById('agenda-omschrijving').addEventListener('input', function(event){
-                let input = event.target.value;
-                input = input.charAt(0).toUpperCase() + input.slice(1);
-                document.getElementById('agenda-omschrijving').value = input;
-            });
         }
 
 
@@ -471,4 +453,6 @@ if (!empty($_POST['agenda-item-naam'])) {
     $result = mysqli_query($connection, $sql);
 
     echo '<div class="test-wrapper">succesfull</div>';
+
+    updateICS($connection);
 }

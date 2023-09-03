@@ -1,9 +1,4 @@
 :root{
-    --oxford-blue: rgb(4, 5, 46);
-    --federal-blue: rgb(20, 1, 82);
-    --neavy-blue: rgb(34, 0, 124);
-    --dark-blue: rgb(13, 0, 164); 
-
     --black: #04060d;
     --black-transparent: #04060d66;
     --iron: #D3D4D7;
@@ -20,7 +15,7 @@
 }
 
 /* text */
-h1, h2, h3, h4, h5, h6, p, li, a, button, textarea, select, option, label, i{
+h1, h2, h3, h4, h5, h6, p, li, a, button, textarea, input, select, option, label, i{
     color: var(--white);
 }
 

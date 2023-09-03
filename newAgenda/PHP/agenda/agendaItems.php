@@ -8,6 +8,7 @@ if(isset($_POST['agenda-submit'])) {
     $agenda_omschrijving = $_POST['agenda-omschrijving'];
     $agenda_start_datum = $_POST['agenda-start-datum'];
     $agenda_eind_datum = $_POST['agenda-start-datum'];
+    $agenda_repeat_item = $_POST['agenda-repeat-item'];
     $agenda_start_tijd = $_POST['agenda-start-tijd'];
     $agenda_eind_tijd = $_POST['agenda-eind-tijd'];
     $agenda_functie = $_POST['agenda-functie'];
@@ -33,18 +34,28 @@ if(isset($_POST['agenda-submit'])) {
         $agenda_eind_tijd = "23:59";
     }
 
+    if($agenda_repeat_item == 0){
+        $agenda_repeat_item = 'false';
+    }
+    if($agenda_repeat_item == 1){
+        $agenda_repeat_item = 'week';
+    }else{
+        $agenda_repeat_item = 'false';
+    }
+
     //prevent sql injection
     $agenda_naam = mysqli_real_escape_string($connection, $agenda_naam);
     $agenda_omschrijving = mysqli_real_escape_string($connection, $agenda_omschrijving);
     $agenda_start_datum = mysqli_real_escape_string($connection, $agenda_start_datum);
     $agenda_eind_datum = mysqli_real_escape_string($connection, $agenda_eind_datum);
+    $agenda_repeat_item = mysqli_real_escape_string($connection, $agenda_repeat_item);
     $agenda_start_tijd = mysqli_real_escape_string($connection, $agenda_start_tijd);
     $agenda_eind_tijd = mysqli_real_escape_string($connection, $agenda_eind_tijd);
     $agenda_functie = mysqli_real_escape_string($connection, $agenda_functie);
     $agenda_kleur = mysqli_real_escape_string($connection, $agenda_kleur);
 
     //insert the data into the database
-    $sqlAgenda = "INSERT INTO agenda (id, userID, naam, omschrijving, startDatum, eindDatum, startTijd, eindTijd, taak, functie, kleur) VALUES ('', '$userID', '$agenda_naam' , '$agenda_omschrijving', '$agenda_start_datum', '$agenda_eind_datum', '$agenda_start_tijd', '$agenda_eind_tijd', 'false', '$agenda_functie', '$agenda_kleur')";
+    $sqlAgenda = "INSERT INTO agenda (id, userID, naam, omschrijving, startDatum, eindDatum, repeatItem, startTijd, eindTijd, taak, functie, kleur) VALUES ('', '$userID', '$agenda_naam' , '$agenda_omschrijving', '$agenda_start_datum', '$agenda_eind_datum', '$agenda_repeat_item' ,'$agenda_start_tijd', '$agenda_eind_tijd', 'false', '$agenda_functie', '$agenda_kleur')";
 
     //run the query in the database
     $result = mysqli_query($connection, $sqlAgenda);
@@ -105,7 +116,7 @@ if(isset($_POST['agenda-delete'])){
 
 function updateICS($connection){
     //rewrite the ICS file so we can add it if needed to google agenda
-    $fileName = "../../GoogleCalender/".$_SESSION['userID'].".ics";
+    $fileName = "GoogleCalender/".$_SESSION['userID'].".ics";
     $agendaFile = fopen($fileName, 'a');
     
     file_put_contents($fileName, "");

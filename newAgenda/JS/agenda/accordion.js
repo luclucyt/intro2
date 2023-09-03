@@ -23,3 +23,29 @@ accordionHeaders.forEach(header => {
         }
     });
 });
+
+
+
+document.getElementById('filter-functie').addEventListener('input', function (){
+           
+    //if there is a filter, hide all agenda items that don't have the same class as the filter
+    if(this.value !== "0") {
+        let agendaItems = document.querySelectorAll('.agenda-item');
+        for(let i = 0; i < agendaItems.length; i++) {
+            if(agendaItems[i].classList.contains(this.value)) {
+                agendaItems[i].style.opacity = '1';
+                agendaItems[i].style.boxShadow = 'rgb(255 255 255) 0px 0px 100px 10px';
+            } else {
+                agendaItems[i].style.opacity = '0.5';
+                agendaItems[i].style.boxShadow = 'none';
+            }
+        }
+    } else {
+        //if there is no filter, show all agenda items
+        let agendaItems = document.querySelectorAll('.agenda-item');
+        for(let i = 0; i < agendaItems.length; i++) {
+            agendaItems[i].style.opacity = '1';
+            agendaItems[i].style.boxShadow = 'none';
+        }
+    }
+});
