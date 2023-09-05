@@ -10,7 +10,6 @@
 
     <!-- CSS -->
     <link rel="stylesheet" href="../../CSS/root.css">
-    <link rel="stylesheet" href="../../CSS/login.css">
 
     <!-- JS -->
     <script src="../../JS/login.js" defer></script>
@@ -19,11 +18,7 @@
     <?php ini_set('display_errors', 0); ?>
 
     <?php include_once '../connectDatabase.php'; ?>
-    <?php include_once '../connectCustomDB.php'; ?>
 
-    <section class="golf-1">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="#140152" fill-opacity="1" d="M0,160L24,165.3C48,171,96,181,144,165.3C192,149,240,107,288,101.3C336,96,384,128,432,149.3C480,171,528,181,576,181.3C624,181,672,171,720,144C768,117,816,75,864,74.7C912,75,960,117,1008,122.7C1056,128,1104,96,1152,74.7C1200,53,1248,43,1296,53.3C1344,64,1392,96,1416,112L1440,128L1440,0L1416,0C1392,0,1344,0,1296,0C1248,0,1200,0,1152,0C1104,0,1056,0,1008,0C960,0,912,0,864,0C816,0,768,0,720,0C672,0,624,0,576,0C528,0,480,0,432,0C384,0,336,0,288,0C240,0,192,0,144,0C96,0,48,0,24,0L0,0Z"></path></svg>
-    </section>
 
     <section class="main">
         <div class="main-login-wrapper">
@@ -31,13 +26,10 @@
             <div class="signup-wrapper">
                 <h1>Nieuw hier?</h1>
                 <form method="POST" action="" autocomplete="off">
-                    <i class="fa-solid fa-user fa-lg"></i>
                     <input type="text" name="username" placeholder="Gebruikersnaam" class="input-sign-up"><br>
 
-                    <i class="fa-solid fa-envelope fa-lg"></i>
                     <input type="email" name="email" placeholder="E-mail" class="input-sign-up"><br>
 
-                    <i class="fa-solid fa-lock fa-lg"></i>
                     <input type="password" name="password" placeholder="Wachtwoord" id="password" class="input-sign-up"><br>
 
                     <button type="submit" name="signup-submit" id="submit-button" class="submit-button"><h2>Registreer nu</h2></button>
@@ -47,17 +39,14 @@
             <div class="login-wrapper">
                 <h1>Log in:</h1>
                 <form method="post" autocomplete="off">
-                    <i class="fa-solid fa-user fa-lg"></i> 
                     <input type="text" name="username" placeholder="Gebruikersnaam" class="login-input">
 
-                    <i class="fa-solid fa-lock fa-lg"></i>
                     <input type="password" name="password" placeholder="Wachtwoord" class="login-input">
 
                     <button type="submit" name="login-submit" class="submit-button"><h2>Log in</h2></button>
                 </form>
             </div>
 
-            <p class="login-toggle"></p>
 
             <?php
                 //start the session
@@ -160,7 +149,6 @@
                                 $kleurKleur = $row['kleur'];
                                 $kleurFunctie = $row['functie'];
 
-                                writeToCustomDB("kleuren", $kleurID, $kleurUserID, $kleurKleur, $kleurFunctie);
                             }
 
 
@@ -178,7 +166,6 @@
 
                                 
 
-                                writeToCustomDB("access", $accessID, $accessUserID, $accessAccesUserID);
                             }
 
                         } else {
@@ -198,7 +185,6 @@
                             $userColorTheme = $row['ColorTheme'];
 
 
-                            writeToCustomDB("login", $userID, $userName, $userEmail, $userPassword, $userColorTheme);
                         }
 
                     } else {
@@ -207,10 +193,6 @@
                 }
             ?>
         </div>
-    </section>
-
-    <section class="golf">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="#140152" fill-opacity="1" d="M0,224L24,218.7C48,213,96,203,144,186.7C192,171,240,149,288,160C336,171,384,213,432,218.7C480,224,528,192,576,186.7C624,181,672,203,720,213.3C768,224,816,224,864,224C912,224,960,224,1008,234.7C1056,245,1104,267,1152,272C1200,277,1248,267,1296,266.7C1344,267,1392,277,1416,282.7L1440,288L1440,320L1416,320C1392,320,1344,320,1296,320C1248,320,1200,320,1152,320C1104,320,1056,320,1008,320C960,320,912,320,864,320C816,320,768,320,720,320C672,320,624,320,576,320C528,320,480,320,432,320C384,320,336,320,288,320C240,320,192,320,144,320C96,320,48,320,24,320L0,320Z"></path></svg>
     </section>
 </body>
 </html>

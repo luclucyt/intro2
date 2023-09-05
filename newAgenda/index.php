@@ -13,19 +13,19 @@
     <title>Agenda</title>
     
     <!-- CSS -->
-    <link rel="stylesheet" href="../../CSS/coloris.min.css">
-    <link rel="stylesheet" href="../../CSS/root.css">
+    <link rel="stylesheet" href="CSS/coloris.min.css">
+    <link rel="stylesheet" href="CSS/root.css">
 
-    <link rel="stylesheet" href="../../CSS/agenda/header.css">
-    <link rel="stylesheet" href="../../CSS/agenda/agenda.css">
-    <link rel="stylesheet" href="../../CSS/agenda/filter.css">
+    <link rel="stylesheet" href="CSS/agenda/header.css">
+    <link rel="stylesheet" href="CSS/agenda/agenda.css">
+    <link rel="stylesheet" href="CSS/agenda/filter.css">
 
     <!-- Javascript -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
-    <script src="../../JS/agenda/coloris.min.js"></script>
+    <script src="JS/agenda/coloris.min.js"></script>
 
-    <script src="../../JS/agenda/agenda.js" defer></script>
-    <script src="../../JS/agenda/accordion.js" defer></script>
+    <script src="JS/agenda/agenda.js" defer></script>
+    <script src="JS/agenda/accordion.js" defer></script>
 </head>
 
 <body>
