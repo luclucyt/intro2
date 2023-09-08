@@ -1,0 +1,23 @@
+:root{
+    --black: #04060d;
+    --black-transparent: #04060d66;
+    --iron: #D3D4D7;
+    --white: #FFFFFF;
+    --dark-blue: #2824e4;
+    --blue: #4034fc;
+    --light-blue: #3E8DE3;
+    --light-blue-transparent: #3f8fe480;
+}
+
+*{
+    margin: 0;
+    padding: 0;
+
+    font-family: Arial, Helvetica, sans-serif;
+    color: var(--white);
+}
+
+body{
+    background-image: url("../IMG/3805265.jpg");
+    background-size: cover;
+}
